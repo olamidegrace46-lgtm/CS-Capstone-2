@@ -5,9 +5,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 
-NAVY = "#1F3A5F"
-TEAL = "#0F7B7B"
-RED = "#C0504D"
+BROWN = "#6B4226"
+BUTTER = "#F3D96B"
 
 
 @st.cache_resource
@@ -128,7 +127,7 @@ def kpi_row(year):
 def chart_review_distribution():
     df = run(Q2)
     fig, ax = plt.subplots(figsize=(6, 4))
-    bars = ax.bar(df["score"].astype(str), df["reviews"], color=NAVY)
+    bars = ax.bar(df["score"].astype(str), df["reviews"], color=BROWN)
     for bar, pct in zip(bars, df["pct"]):
         ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
                 f"{pct}%", ha="center", va="bottom")
@@ -141,7 +140,7 @@ def chart_review_distribution():
 def chart_monthly_score(year):
     df = run(Q3, (year, year))
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(df["month"], df["avg_score"], marker="o", color=TEAL)
+    ax.plot(df["month"], df["avg_score"], marker="o", color=BROWN, markerfacecolor=BUTTER)
     ax.set_title("Monthly average review score\n(2016 is a partial year with few reviews)")
     ax.set_ylabel("Average score")
     ax.set_ylim(1, 5)
@@ -153,7 +152,7 @@ def chart_monthly_score(year):
 def chart_state_scores(state_json):
     df = run(Q4, (state_json, state_json))
     fig, ax = plt.subplots(figsize=(7, 5))
-    ax.barh(df["state"], df["avg_score"], color=NAVY)
+    ax.barh(df["state"], df["avg_score"], color=BROWN)
     ax.invert_yaxis()
     ax.set_title("Average review score by state (top 10 by orders)")
     ax.set_xlabel("Average review score")
@@ -168,8 +167,8 @@ def chart_ontime_late(state_json):
     x = range(len(df))
     w = 0.38
     fig, ax = plt.subplots(figsize=(7, 4))
-    ax.bar([i - w / 2 for i in x], df["on_time"], w, label="On time", color=TEAL)
-    ax.bar([i + w / 2 for i in x], df["late"], w, label="Late", color=RED)
+    ax.bar([i - w / 2 for i in x], df["on_time"], w, label="On time", color=BUTTER)
+    ax.bar([i + w / 2 for i in x], df["late"], w, label="Late", color=BROWN)
     ax.set_xticks(list(x))
     ax.set_xticklabels(df["state"])
     ax.set_title("On-time vs late delivery by state (top 5)")
@@ -182,11 +181,11 @@ def chart_ontime_late(state_json):
 def chart_punctuality(state_json):
     df = run(Q6, (state_json, state_json))
     fig, ax = plt.subplots(figsize=(6, 4))
-    colors = [TEAL if s == "On Time" else RED for s in df["delivery_status"]]
+    colors = [BUTTER if s == "On Time" else BROWN for s in df["delivery_status"]]
     bars = ax.bar(df["delivery_status"], df["avg_score"], color=colors)
     for bar, (_, row) in zip(bars, df.iterrows()):
         ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
-                f"{row['avg_score']:.2f}\n{row['avg_delivery_days']:.1f} days",
+                f"{row['avg_score']:.2f} stars\n{row['avg_delivery_days']:.2f} days",
                 ha="center", va="bottom")
     ax.set_ylim(0, 5)
     ax.set_title("Delivery punctuality vs satisfaction")
