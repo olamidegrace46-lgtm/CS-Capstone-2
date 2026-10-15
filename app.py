@@ -5,8 +5,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 
-BROWN = "#6B4226"
-BUTTER = "#F3D96B"
+
+NAVY = "#183153"
+TEAL = "#168C8C"
+LIGHT_GREY = "#EAF0F6"
+MUTED_GREY = "#667085"
+
 
 
 @st.cache_resource
